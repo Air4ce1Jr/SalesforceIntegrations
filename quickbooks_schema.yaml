@@ -1,0 +1,1759 @@
+openapi: 3.0.3
+info:
+  title: QuickBooks Accounting API
+  description: |
+    Partial schema with CRUD endpoints for Customers, Invoices, and Payments.
+    Uses realm ID `9341454816381446` as an example.
+  version: '1.0.0'
+servers:
+  - url: https://quickbooks.api.intuit.com/v3/company/{realmId}
+    variables:
+      realmId:
+        default: '9341454816381446'
+        description: The company realm ID.
+paths:
+  /customer:
+    post:
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customer/{customerId}:
+    get:
+      summary: Retrieve a customer by ID
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customer\?operation=update:
+    post:
+      summary: Update a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customer\?operation=delete:
+    post:
+      summary: Delete a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Customer deleted
+
+  /invoice:
+    post:
+      summary: Create an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '200':
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /invoice/{invoiceId}:
+    get:
+      summary: Retrieve an invoice by ID
+      parameters:
+        - in: path
+          name: invoiceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invoice found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /invoice\?operation=update:
+    post:
+      summary: Update an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '200':
+          description: Invoice updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /invoice\?operation=delete:
+    post:
+      summary: Delete an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Invoice deleted
+  /invoice\?operation=void:
+    post:
+      summary: Void an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Invoice voided
+
+  /payment:
+    post:
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '200':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /payment/{paymentId}:
+    get:
+      summary: Retrieve a payment by ID
+      parameters:
+        - in: path
+          name: paymentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /payment\?operation=update:
+    post:
+      summary: Update a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '200':
+          description: Payment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /payment\?operation=delete:
+    post:
+      summary: Delete a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Payment deleted
+
+  /account:
+    post:
+      summary: Create a account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /account/{accountId}:
+    get:
+      summary: Retrieve a account by ID
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /account?operation=update:
+    post:
+      summary: Update a account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /account?operation=delete:
+    post:
+      summary: Delete a account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Account deleted
+
+  /bill:
+    post:
+      summary: Create a bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bill'
+      responses:
+        '200':
+          description: Bill created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+  /bill/{billId}:
+    get:
+      summary: Retrieve a bill by ID
+      parameters:
+        - in: path
+          name: billId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bill found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+  /bill?operation=update:
+    post:
+      summary: Update a bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bill'
+      responses:
+        '200':
+          description: Bill updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+  /bill?operation=delete:
+    post:
+      summary: Delete a bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Bill deleted
+
+  /billpayment:
+    post:
+      summary: Create a billpayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Billpayment'
+      responses:
+        '200':
+          description: Billpayment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Billpayment'
+  /billpayment/{billpaymentId}:
+    get:
+      summary: Retrieve a billpayment by ID
+      parameters:
+        - in: path
+          name: billpaymentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Billpayment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Billpayment'
+  /billpayment?operation=update:
+    post:
+      summary: Update a billpayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Billpayment'
+      responses:
+        '200':
+          description: Billpayment updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Billpayment'
+  /billpayment?operation=delete:
+    post:
+      summary: Delete a billpayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Billpayment deleted
+
+  /class:
+    post:
+      summary: Create a class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+      responses:
+        '200':
+          description: Class created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+  /class/{classId}:
+    get:
+      summary: Retrieve a class by ID
+      parameters:
+        - in: path
+          name: classId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Class found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+  /class?operation=update:
+    post:
+      summary: Update a class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+      responses:
+        '200':
+          description: Class updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+  /class?operation=delete:
+    post:
+      summary: Delete a class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Class deleted
+
+  /companyinfo:
+    post:
+      summary: Create a companyinfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Companyinfo'
+      responses:
+        '200':
+          description: Companyinfo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Companyinfo'
+  /companyinfo/{companyinfoId}:
+    get:
+      summary: Retrieve a companyinfo by ID
+      parameters:
+        - in: path
+          name: companyinfoId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Companyinfo found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Companyinfo'
+  /companyinfo?operation=update:
+    post:
+      summary: Update a companyinfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Companyinfo'
+      responses:
+        '200':
+          description: Companyinfo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Companyinfo'
+  /companyinfo?operation=delete:
+    post:
+      summary: Delete a companyinfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Companyinfo deleted
+
+  /creditmemo:
+    post:
+      summary: Create a creditmemo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Creditmemo'
+      responses:
+        '200':
+          description: Creditmemo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Creditmemo'
+  /creditmemo/{creditmemoId}:
+    get:
+      summary: Retrieve a creditmemo by ID
+      parameters:
+        - in: path
+          name: creditmemoId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Creditmemo found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Creditmemo'
+  /creditmemo?operation=update:
+    post:
+      summary: Update a creditmemo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Creditmemo'
+      responses:
+        '200':
+          description: Creditmemo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Creditmemo'
+  /creditmemo?operation=delete:
+    post:
+      summary: Delete a creditmemo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Creditmemo deleted
+
+  /department:
+    post:
+      summary: Create a department
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+      responses:
+        '200':
+          description: Department created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+  /department/{departmentId}:
+    get:
+      summary: Retrieve a department by ID
+      parameters:
+        - in: path
+          name: departmentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Department found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+  /department?operation=update:
+    post:
+      summary: Update a department
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+      responses:
+        '200':
+          description: Department updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+  /department?operation=delete:
+    post:
+      summary: Delete a department
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Department deleted
+
+  /deposit:
+    post:
+      summary: Create a deposit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+      responses:
+        '200':
+          description: Deposit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deposit'
+  /deposit/{depositId}:
+    get:
+      summary: Retrieve a deposit by ID
+      parameters:
+        - in: path
+          name: depositId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deposit found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deposit'
+  /deposit?operation=update:
+    post:
+      summary: Update a deposit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+      responses:
+        '200':
+          description: Deposit updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deposit'
+  /deposit?operation=delete:
+    post:
+      summary: Delete a deposit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Deposit deleted
+
+  /employee:
+    post:
+      summary: Create a employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /employee/{employeeId}:
+    get:
+      summary: Retrieve a employee by ID
+      parameters:
+        - in: path
+          name: employeeId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employee found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /employee?operation=update:
+    post:
+      summary: Update a employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /employee?operation=delete:
+    post:
+      summary: Delete a employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Employee deleted
+
+  /estimate:
+    post:
+      summary: Create a estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estimate'
+      responses:
+        '200':
+          description: Estimate created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+  /estimate/{estimateId}:
+    get:
+      summary: Retrieve a estimate by ID
+      parameters:
+        - in: path
+          name: estimateId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Estimate found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+  /estimate?operation=update:
+    post:
+      summary: Update a estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estimate'
+      responses:
+        '200':
+          description: Estimate updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+  /estimate?operation=delete:
+    post:
+      summary: Delete a estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Estimate deleted
+
+  /item:
+    post:
+      summary: Create a item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /item/{itemId}:
+    get:
+      summary: Retrieve a item by ID
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /item?operation=update:
+    post:
+      summary: Update a item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: Item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /item?operation=delete:
+    post:
+      summary: Delete a item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Item deleted
+
+  /journalentry:
+    post:
+      summary: Create a journalentry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Journalentry'
+      responses:
+        '200':
+          description: Journalentry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journalentry'
+  /journalentry/{journalentryId}:
+    get:
+      summary: Retrieve a journalentry by ID
+      parameters:
+        - in: path
+          name: journalentryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Journalentry found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journalentry'
+  /journalentry?operation=update:
+    post:
+      summary: Update a journalentry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Journalentry'
+      responses:
+        '200':
+          description: Journalentry updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journalentry'
+  /journalentry?operation=delete:
+    post:
+      summary: Delete a journalentry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Journalentry deleted
+
+  /purchase:
+    post:
+      summary: Create a purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+      responses:
+        '200':
+          description: Purchase created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+  /purchase/{purchaseId}:
+    get:
+      summary: Retrieve a purchase by ID
+      parameters:
+        - in: path
+          name: purchaseId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Purchase found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+  /purchase?operation=update:
+    post:
+      summary: Update a purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+      responses:
+        '200':
+          description: Purchase updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+  /purchase?operation=delete:
+    post:
+      summary: Delete a purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Purchase deleted
+
+  /purchaseorder:
+    post:
+      summary: Create a purchaseorder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchaseorder'
+      responses:
+        '200':
+          description: Purchaseorder created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaseorder'
+  /purchaseorder/{purchaseorderId}:
+    get:
+      summary: Retrieve a purchaseorder by ID
+      parameters:
+        - in: path
+          name: purchaseorderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Purchaseorder found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaseorder'
+  /purchaseorder?operation=update:
+    post:
+      summary: Update a purchaseorder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchaseorder'
+      responses:
+        '200':
+          description: Purchaseorder updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchaseorder'
+  /purchaseorder?operation=delete:
+    post:
+      summary: Delete a purchaseorder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Purchaseorder deleted
+
+  /refundreceipt:
+    post:
+      summary: Create a refundreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Refundreceipt'
+      responses:
+        '200':
+          description: Refundreceipt created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refundreceipt'
+  /refundreceipt/{refundreceiptId}:
+    get:
+      summary: Retrieve a refundreceipt by ID
+      parameters:
+        - in: path
+          name: refundreceiptId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Refundreceipt found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refundreceipt'
+  /refundreceipt?operation=update:
+    post:
+      summary: Update a refundreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Refundreceipt'
+      responses:
+        '200':
+          description: Refundreceipt updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refundreceipt'
+  /refundreceipt?operation=delete:
+    post:
+      summary: Delete a refundreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Refundreceipt deleted
+
+  /salesreceipt:
+    post:
+      summary: Create a salesreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Salesreceipt'
+      responses:
+        '200':
+          description: Salesreceipt created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salesreceipt'
+  /salesreceipt/{salesreceiptId}:
+    get:
+      summary: Retrieve a salesreceipt by ID
+      parameters:
+        - in: path
+          name: salesreceiptId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Salesreceipt found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salesreceipt'
+  /salesreceipt?operation=update:
+    post:
+      summary: Update a salesreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Salesreceipt'
+      responses:
+        '200':
+          description: Salesreceipt updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salesreceipt'
+  /salesreceipt?operation=delete:
+    post:
+      summary: Delete a salesreceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Salesreceipt deleted
+
+  /transfer:
+    post:
+      summary: Create a transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      responses:
+        '200':
+          description: Transfer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+  /transfer/{transferId}:
+    get:
+      summary: Retrieve a transfer by ID
+      parameters:
+        - in: path
+          name: transferId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transfer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+  /transfer?operation=update:
+    post:
+      summary: Update a transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      responses:
+        '200':
+          description: Transfer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+  /transfer?operation=delete:
+    post:
+      summary: Delete a transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Transfer deleted
+
+  /vendor:
+    post:
+      summary: Create a vendor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+      responses:
+        '200':
+          description: Vendor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendor'
+  /vendor/{vendorId}:
+    get:
+      summary: Retrieve a vendor by ID
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vendor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendor'
+  /vendor?operation=update:
+    post:
+      summary: Update a vendor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+      responses:
+        '200':
+          description: Vendor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendor'
+  /vendor?operation=delete:
+    post:
+      summary: Delete a vendor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Vendor deleted
+
+  /vendorcredit:
+    post:
+      summary: Create a vendorcredit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendorcredit'
+      responses:
+        '200':
+          description: Vendorcredit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendorcredit'
+  /vendorcredit/{vendorcreditId}:
+    get:
+      summary: Retrieve a vendorcredit by ID
+      parameters:
+        - in: path
+          name: vendorcreditId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vendorcredit found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendorcredit'
+  /vendorcredit?operation=update:
+    post:
+      summary: Update a vendorcredit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendorcredit'
+      responses:
+        '200':
+          description: Vendorcredit updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vendorcredit'
+  /vendorcredit?operation=delete:
+    post:
+      summary: Delete a vendorcredit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id:
+                  type: string
+                SyncToken:
+                  type: string
+              required: [Id, SyncToken]
+      responses:
+        '200':
+          description: Vendorcredit deleted
+
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        Id:
+          type: string
+        SyncToken:
+          type: string
+        DisplayName:
+          type: string
+        GivenName:
+          type: string
+        FamilyName:
+          type: string
+        PrimaryEmailAddr:
+          type: object
+          properties:
+            Address:
+              type: string
+        PrimaryPhone:
+          type: object
+          properties:
+            FreeFormNumber:
+              type: string
+        BillAddr:
+          $ref: '#/components/schemas/PhysicalAddress'
+        ShipAddr:
+          $ref: '#/components/schemas/PhysicalAddress'
+    Invoice:
+      type: object
+      properties:
+        Id:
+          type: string
+        SyncToken:
+          type: string
+        TxnDate:
+          type: string
+          format: date
+        CustomerRef:
+          type: object
+          properties:
+            value:
+              type: string
+            name:
+              type: string
+        Line:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        TotalAmt:
+          type: number
+          format: float
+        Balance:
+          type: number
+          format: float
+    Payment:
+      type: object
+      properties:
+        Id:
+          type: string
+        SyncToken:
+          type: string
+        CustomerRef:
+          type: object
+          properties:
+            value:
+              type: string
+            name:
+              type: string
+        TotalAmt:
+          type: number
+          format: float
+        Line:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+    LineItem:
+      type: object
+      properties:
+        Id:
+          type: string
+        Description:
+          type: string
+        Amount:
+          type: number
+          format: float
+        DetailType:
+          type: string
+    PhysicalAddress:
+      type: object
+      properties:
+        Line1:
+          type: string
+        City:
+          type: string
+        Country:
+          type: string
+        PostalCode:
+          type: string
+    Account:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Bill:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Billpayment:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Class:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Companyinfo:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Creditmemo:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Department:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Deposit:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Employee:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Estimate:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Item:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Journalentry:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Purchase:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Purchaseorder:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Refundreceipt:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Salesreceipt:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Transfer:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Vendor:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
+    Vendorcredit:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+
