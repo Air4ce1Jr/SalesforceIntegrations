@@ -304,7 +304,7 @@ public class QuickBooksInvoiceIntegrationTest {
      */
     @isTest
     static void testQuickBooksResponseDeserialization() {
-        String mockResponse = '{"Invoice": {"Id": "123", "SyncToken": "0", "TotalAmt": 1000.00}, "time": "2024-01-01T12:00:00Z"}';
+        String mockResponse = '{"Invoice": {"Id": "123", "SyncToken": "0", "TotalAmt": 1000.00}, "responseTime": "2024-01-01T12:00:00Z"}';
         
         Test.startTest();
         QuickBooksInvoiceIntegration.QBInvoiceResponse response = 

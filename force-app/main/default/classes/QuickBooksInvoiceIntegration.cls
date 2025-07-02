@@ -14,7 +14,7 @@ public class QuickBooksInvoiceIntegration {
      */
     public class QBInvoiceResponse {
         public QBInvoice Invoice;
-        public String time;
+        public String responseTime;
         public String QueryResponse;
     }
     
@@ -293,8 +293,7 @@ public class QuickBooksInvoiceIntegration {
      * @return String The realm ID
      */
     private static String getRealmId() {
-        // This should be stored in custom metadata or custom settings
-        // For this example, using a default value
+        // Using the provided realm ID for your QuickBooks company
         return '9341454816381446';
     }
     
