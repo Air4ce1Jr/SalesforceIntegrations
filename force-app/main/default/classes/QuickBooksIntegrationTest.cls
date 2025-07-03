@@ -207,4 +207,162 @@ public class QuickBooksIntegrationTest {
         System.assertEquals(true, connected, 'Connection should be true for mock');
         System.assertNotEquals(null, customerId, 'Should find test customer');
     }
+    
+    // ========================================
+    // BACKWARD COMPATIBILITY TESTS
+    // ========================================
+    
+    @isTest
+    static void testSyncCustomerResult() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new QuickBooksMockService());
+        
+        QuickBooksService service = new QuickBooksService();
+        QuickBooksModels.QBCustomer customer = new QuickBooksModels.QBCustomer();
+        customer.Name = 'Test Customer';
+        customer.CompanyName = 'Test Company';
+        
+        QuickBooksService.CustomerResult result = service.syncCustomerResult(customer);
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(true, result.success, 'Should be successful');
+        System.assertNotEquals(null, result.customerId, 'Customer ID should be set');
+    }
+    
+    @isTest
+    static void testCreateCustomerResult() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new QuickBooksMockService());
+        
+        QuickBooksService service = new QuickBooksService();
+        QuickBooksService.CustomerResult result = service.createCustomerResult(
+            'Test Customer', 
+            '123 Main St', 
+            '555-1234'
+        );
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(true, result.success, 'Should be successful');
+        System.assertEquals('Customer created successfully', result.message, 'Should have success message');
+    }
+    
+    @isTest
+    static void testFindCustomerResult() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new QuickBooksMockService());
+        
+        QuickBooksService service = new QuickBooksService();
+        QuickBooksService.CustomerResult result = service.findCustomerResult('Test Customer');
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(true, result.success, 'Should find customer');
+        System.assertNotEquals(null, result.customerId, 'Should return customer ID');
+    }
+    
+    @isTest
+    static void testBackwardCompatibilityErrors() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new QuickBooksMockService(true, 'Test error'));
+        
+        QuickBooksService service = new QuickBooksService();
+        QuickBooksModels.QBCustomer customer = new QuickBooksModels.QBCustomer();
+        customer.Name = 'Test Customer';
+        
+        QuickBooksService.CustomerResult result = service.syncCustomerResult(customer);
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(false, result.success, 'Should indicate failure');
+        System.assertNotEquals(null, result.errorCode, 'Should have error code');
+    }
+    
+    @isTest
+    static void testBillingEmailsVariable() {
+        Test.startTest();
+        
+        String emails = QuickBooksService.testBillingEmails;
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, emails, 'testBillingEmails should not be null');
+        System.assert(emails.contains('@'), 'testBillingEmails should contain email addresses');
+    }
+    
+    @isTest
+    static void testCustomerResultConstructors() {
+        Test.startTest();
+        
+        QuickBooksService.CustomerResult result1 = new QuickBooksService.CustomerResult('123', true, 'Success');
+        QuickBooksService.CustomerResult result2 = new QuickBooksService.CustomerResult('456', false, 'Error', 'ERR001');
+        
+        Test.stopTest();
+        
+        System.assertEquals('123', result1.customerId, 'Customer ID should match');
+        System.assertEquals(true, result1.success, 'Success flag should match');
+        System.assertEquals('Success', result1.message, 'Message should match');
+        
+        System.assertEquals('456', result2.customerId, 'Customer ID should match');
+        System.assertEquals(false, result2.success, 'Success flag should match');
+        System.assertEquals('Error', result2.message, 'Message should match');
+        System.assertEquals('ERR001', result2.errorCode, 'Error code should match');
+    }
+    
+    @isTest
+    static void testFindCustomerNotFound() {
+        Test.startTest();
+        
+        QuickBooksMockService mockService = new QuickBooksMockService();
+        mockService.customerNotFound = true;
+        Test.setMock(HttpCalloutMock.class, mockService);
+        
+        QuickBooksService service = new QuickBooksService();
+        QuickBooksService.CustomerResult result = service.findCustomerResult('Nonexistent Customer');
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(false, result.success, 'Should not find customer');
+        System.assertEquals('NOT_FOUND', result.errorCode, 'Should have NOT_FOUND error code');
+    }
+    
+    @isTest
+    static void testCreateOrUpdateCustomer() {
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new QuickBooksMockService());
+        
+        Account testAccount = [SELECT Id, Name, Phone, BillingStreet, BillingCity, BillingState, BillingPostalCode FROM Account LIMIT 1];
+        
+        QuickBooksService.CustomerResult result = QuickBooksService.createOrUpdateCustomer(testAccount);
+        
+        Test.stopTest();
+        
+        // Verify account was processed successfully
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(true, result.success, 'Should be successful');
+        System.assertNotEquals(null, result.customerId, 'Customer ID should be returned');
+        
+        Account updatedAccount = [SELECT QuickBooks_Customer_Id__c FROM Account WHERE Id = :testAccount.Id];
+        System.assertNotEquals(null, updatedAccount, 'Account should still exist');
+    }
+    
+    @isTest
+    static void testCreateOrUpdateCustomerNull() {
+        Test.startTest();
+        
+        QuickBooksService.CustomerResult result = QuickBooksService.createOrUpdateCustomer(null);
+        
+        Test.stopTest();
+        
+        // Should handle null account gracefully
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assertEquals(false, result.success, 'Should indicate failure');
+        System.assertEquals('NULL_ACCOUNT', result.errorCode, 'Should have NULL_ACCOUNT error code');
+    }
 }

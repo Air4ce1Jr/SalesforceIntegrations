@@ -11,6 +11,36 @@ public class QuickBooksService implements IQuickBooksService {
     private static final String QUERY_ENDPOINT = '/query';
     private static final String REALM_ID = '9341454816381446';
     
+    // Backward compatibility - missing variable expected by existing production code
+    public static String testBillingEmails = 'test@example.com,admin@example.com';
+    
+    /**
+     * @description Backward compatibility - Customer result wrapper class expected by existing code
+     */
+    public class CustomerResult {
+        public String customerId;
+        public String id; // Backward compatibility - existing code expects 'id' property
+        public String syncToken; // Backward compatibility - existing code expects 'syncToken' property
+        public Boolean success;
+        public String message;
+        public String errorCode;
+        public Map<String, Object> additionalData;
+        
+        public CustomerResult(String customerId, Boolean success, String message) {
+            this.customerId = customerId;
+            this.id = customerId; // Set both for backward compatibility
+            this.syncToken = '0'; // Default sync token for backward compatibility
+            this.success = success;
+            this.message = message;
+            this.additionalData = new Map<String, Object>();
+        }
+        
+        public CustomerResult(String customerId, Boolean success, String message, String errorCode) {
+            this(customerId, success, message);
+            this.errorCode = errorCode;
+        }
+    }
+    
     /**
      * @description Create or update a customer in QuickBooks
      * @param customer The customer data to sync
@@ -301,6 +331,118 @@ public class QuickBooksService implements IQuickBooksService {
         } catch (Exception e) {
             System.debug('Connection test failed: ' + e.getMessage());
             return false;
+        }
+    }
+    
+    // ========================================
+    // BACKWARD COMPATIBILITY METHODS
+    // ========================================
+    // These methods provide compatibility with existing production code
+    // that expects CustomerResult return types
+    
+    /**
+     * @description Backward compatible customer sync method
+     * @param customer The customer data to sync
+     * @return CustomerResult object for backward compatibility
+     */
+    public CustomerResult syncCustomerResult(QuickBooksModels.QBCustomer customer) {
+        String result = syncCustomer(customer);
+        
+        if (result.startsWith('Error:')) {
+            return new CustomerResult(null, false, result, 'SYNC_ERROR');
+        } else {
+            return new CustomerResult(result, true, 'Customer synced successfully');
+        }
+    }
+    
+    /**
+     * @description Backward compatible customer creation method
+     * @param customerName Customer name
+     * @param billingAddress Billing address
+     * @param phone Phone number
+     * @return CustomerResult object for backward compatibility
+     */
+    public CustomerResult createCustomerResult(String customerName, String billingAddress, String phone) {
+        try {
+            QuickBooksModels.QBCustomer customer = new QuickBooksModels.QBCustomer();
+            customer.Name = customerName;
+            customer.DisplayName = customerName;
+            customer.CompanyName = customerName;
+            customer.PrimaryPhone = phone;
+            customer.Active = true;
+            
+            if (String.isNotBlank(billingAddress)) {
+                customer.BillAddr = new QuickBooksModels.QBAddress();
+                customer.BillAddr.Line1 = billingAddress;
+            }
+            
+            String result = syncCustomer(customer);
+            
+            if (result.startsWith('Error:')) {
+                return new CustomerResult(null, false, result, 'CREATE_ERROR');
+            } else {
+                return new CustomerResult(result, true, 'Customer created successfully');
+            }
+        } catch (Exception e) {
+            return new CustomerResult(null, false, 'Exception: ' + e.getMessage(), 'EXCEPTION');
+        }
+    }
+    
+    /**
+     * @description Backward compatible find customer method
+     * @param customerName The customer name to search for
+     * @return CustomerResult object for backward compatibility
+     */
+    public CustomerResult findCustomerResult(String customerName) {
+        try {
+            String customerId = findCustomerByName(customerName);
+            
+            if (String.isNotBlank(customerId)) {
+                return new CustomerResult(customerId, true, 'Customer found');
+            } else {
+                return new CustomerResult(null, false, 'Customer not found', 'NOT_FOUND');
+            }
+        } catch (Exception e) {
+            return new CustomerResult(null, false, 'Exception: ' + e.getMessage(), 'EXCEPTION');
+        }
+    }
+    
+    /**
+     * @description Backward compatible method expected by existing production code
+     * @param account The Salesforce Account to create/update in QuickBooks
+     * @return CustomerResult object with sync results
+     */
+    public static CustomerResult createOrUpdateCustomer(Account account) {
+        try {
+            if (account == null) {
+                System.debug('Account is null, cannot create/update customer');
+                return new CustomerResult(null, false, 'Account is null', 'NULL_ACCOUNT');
+            }
+            
+            // Create service instance to call instance methods
+            QuickBooksService service = new QuickBooksService();
+            QuickBooksModels.QBCustomer customer = QuickBooksModels.convertAccountToCustomer(account);
+            String result = service.syncCustomer(customer);
+            
+            if (!result.startsWith('Error:')) {
+                // Update the account with the QuickBooks Customer ID if successful
+                if (String.isBlank(account.QuickBooks_Customer_Id__c)) {
+                    account.QuickBooks_Customer_Id__c = result;
+                    
+                    try {
+                        update account;
+                    } catch (DmlException e) {
+                        System.debug('Could not update account with QuickBooks Customer ID: ' + e.getMessage());
+                    }
+                }
+                return new CustomerResult(result, true, 'Customer synced successfully');
+            } else {
+                System.debug('Error creating/updating customer in QuickBooks: ' + result);
+                return new CustomerResult(null, false, result, 'SYNC_ERROR');
+            }
+        } catch (Exception e) {
+            System.debug('Exception in createOrUpdateCustomer: ' + e.getMessage());
+            return new CustomerResult(null, false, 'Exception: ' + e.getMessage(), 'EXCEPTION');
         }
     }
 }
