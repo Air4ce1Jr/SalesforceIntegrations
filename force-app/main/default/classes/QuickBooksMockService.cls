@@ -8,6 +8,7 @@ public class QuickBooksMockService implements IQuickBooksService {
     
     private Boolean shouldFail;
     private String errorMessage;
+    public Boolean customerNotFound = false;
     
     /**
      * @description Constructor for mock service
@@ -47,6 +48,10 @@ public class QuickBooksMockService implements IQuickBooksService {
      */
     public String findCustomerByName(String customerName) {
         if (shouldFail) {
+            return null;
+        }
+        
+        if (customerNotFound) {
             return null;
         }
         
