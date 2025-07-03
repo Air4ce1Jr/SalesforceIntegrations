@@ -1,0 +1,39 @@
+{
+  "name": "QuickBooks Salesforce Integration",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "salesforce.salesforcedx-vscode",
+        "salesforce.salesforcedx-vscode-apex",
+        "salesforce.salesforcedx-vscode-core",
+        "salesforce.salesforcedx-vscode-lightning",
+        "salesforce.salesforcedx-vscode-lwc",
+        "ms-vscode.vscode-json",
+        "ms-vscode.vscode-typescript-next",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "salesforcedx-vscode-core.telemetry.enabled": false,
+        "salesforcedx-vscode-core.experimental.deployRetrieve": true,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  
+  "forwardPorts": [3000, 8080],
+  
+  "postCreateCommand": "npm install -g @salesforce/cli && sf --version",
+  
+  "remoteUser": "node",
+  
+  "mounts": [
+    "source=${localWorkspaceFolder}/.sfdx,target=/home/node/.sfdx,type=bind,consistency=cached"
+  ]
+}
